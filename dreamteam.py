@@ -31,17 +31,64 @@
 # <name: Steven Schultz, age: 23, major: English>
 # print(Johnny)
 # <name: Jonathan Rosenberg, age: 24, major: Biology>
+class Student_room(object):
+    name = ""
+    age = 0
+    major = ""
+
+    # The class "constructor" - It's actually an initializer
+    def __init__(self, name, age, major):
+        self.name = name
+        self.age = age
+        self.major = major
+    def list_values(self):
+        print(f"Name: {self.name}")
+        print (f"Age: {self.age}")
+        print (f"Major: {self.major}")
+
+def make_student(name, age, major):
+    student = Student_room(name, age, major)
+    return student
+
+print("A list of students.")
+Steve = make_student("Steven Schultz",23,"English")
+Johnny = make_student("Jonathan Rosenberg",24,"Biology")
+Penny = make_student("Penelope Meramveliotakis",21,"Physics")
+Steve.list_values()
+Johnny.list_values()
+Penny.list_values()
 
 
 
-# # 4 
+# # 4
 # Dollar
 # Создайте функцию dollarize (), которая принимает Float и возвращает долларовый формат:
-
 # Copy
 # dollarize(123456.78901) -> "$123,456.80"
 # dollarize(-123456.7801) -> "-$123,456.78"
 # dollarize(1000000) -> "$1,000,000"
+
+def dollarize(value):
+
+    value = str(value).split('.')
+    money = ''
+    count = 1
+
+    for digit in value[0][::-1]:
+        if count != 3:
+            money += digit
+            count += 1
+        else:
+            money += f'{digit},'
+            count = 1
+
+    if len(value) == 1:
+        money = ('$' + money[::-1]).replace('$-','-$')
+    else:
+        money = ('$' + money[::-1] + '.' + value[1]).replace('$-','-$')
+    return money
+
+print(dollarize(int(input("Enter a float: "))))
 
 # Преобразуйте эту функцию в полезный класс MoneyFmt. MoneyFmt содержит одно значение данных (количество) и 4 метода.
 # Copy
@@ -50,18 +97,58 @@
 #     "repr" //методы возвращают значение с плавающей запятой
 #     "str" //метод, реализующий логику метода dollarize ()
 
+from decimal import Decimal
+
+def moneyfmt(value, places=2, curr='', sep=',', dp='.',
+             pos='', neg='-', trailneggg=''):
+
+    q = Decimal(10) ** -places
+    sign, digits, exp = value.quantize(q).as_tuple()
+    result = []
+    digits = list(map(str, digits))
+    build, nex = result.append, digits.pop
+    if sign:
+        build(trailneggg)
+    for i in range(places):
+        build(nex() if digits else '0')
+    if places:
+        build(dp)
+    if not digits:
+        build('0')
+    i = 0
+    while digits:
+        build(nex())
+        i += 1
+        if i == 3 and digits:
+            i = 0
+            build(sep)
+    build(curr)
+    build(neg if sign else pos)
+    return ''.join(reversed(result))
+
+d = Decimal(12345678.021)
+
+print(moneyfmt(d, curr='$'))
+print(moneyfmt(d, places=0, sep='.', dp='', neg='', trailneggg='-'))
+print(moneyfmt(d, curr='$', neg='(', trailneggg=')'))
+print(moneyfmt(Decimal(1234567.021), sep=' '))
+print(moneyfmt(Decimal('-0.03'), neg='<', trailneggg='>'))
+# $12,345,678.02
+# 12.345.678
+# $12,345,678.02
+# 1 234 567.02
+# <0.03>
+
 # Copy
 # //Результат будет выглядеть так:
 # import moneyfmt
 # cash = moneyfmt.MoneyFmt(12345678.021)
 # print(cash) -- returns "$12,345,678.02"
-# cash.update(100000.4567) 
+# cash.update(100000.4567)
 # print(cash) -- returns "$100,000.46"
 # cash.update(-0.3)
 # print(cash) -- returns "-$0.30"
 # repr(cash) -- returns -0.3
-
-
 
 # # 5  
 # Deck of Cards:

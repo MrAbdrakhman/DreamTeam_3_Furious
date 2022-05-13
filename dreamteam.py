@@ -74,6 +74,8 @@
 
 # Copy
 # from random import shuffle
+class Cards:
+    pass
 
 
 

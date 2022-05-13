@@ -50,20 +50,14 @@ class Deck:
             j = random.randrange(i, num_cards)
             self.cards[i], self.cards[j] = self.cards[j], self.cards[i]
 
-    def remove(self, card):
-        if card in self.cards:
-            self.cards.remove(card)
-            return True
-        else:
-            return False
-
     def pop(self):
         return self.cards.pop()
-
-    def is_empty(self):
-        return (len(self.cards) == 0)
 
 deck=Deck()
 print(deck)
 deck.shuffle()
+deck.print_deck()
+p=deck.pop()
+
+print('удаленная карта', p)
 deck.print_deck()
